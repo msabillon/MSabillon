@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<p><font face = "Cooper Black", size = 6, color ="MAROON"><b><center>"Conozca Honduras"</center></b></font><font size = 5><i><center>Principales Corredores Turísticos y Concesiones Mineras del País</center></i></p>
+		
+		<meta charset="utf-8"/>
+		<title>Mapa de Corredores Turísticos y Concesiones Mineras de Honduras</title>
+	
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+		integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+		crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+		integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+		crossorigin="">
+  		</script>
+		
+		<!--Stilos-->
+		<link rel="stylesheet" href="stilos.css" type="text/css">
+					
+		<!--ESRIMaps-->
+		<script src="https://unpkg.com/esri-leaflet@2.3.0/dist/esri-leaflet.js"
+		integrity="sha512-1tScwpjXwwnm6tTva0l0/ZgM3rYNbdyMj5q6RSQMbNX6EUMhYDE3pMRGZaT41zHEvLoWEK7qFEJmZDOoDMU7/Q=="
+		crossorigin=""></script>
+				
+		<!--Plugins de Leaflet - Controles MiniMap y Mouse-->
+		<link rel="stylesheet" href="Control.MiniMap.css" />
+		<script src="Control.MiniMap.js" type= "text/javascript">
+		</script>
+		<link rel="stylesheet" href="L.Control.MousePosition.css" />
+		<script src="L.Control.MousePosition.js" type= "text/javascript">
+		</script>
+				
+		<!--Marcadores de DataVisualizationMarkers-->
+		<link rel="stylesheet" href="dvf.css" /> 
+		<script src="leaflet-dvf.js"></script> 
+		<script src="leaflet.dvf.regularpolygon.js"></script>  
+			
+		<!--GeoJSON-->
+		<script type="text/javascript" src="Catastro_Minero.js"></script>
+	
+	</head>
+    
+	<body>
+		<body style="background-color:#FFFAF0;"></body>
+
+		<div id="map" class="map">
+		</div>
+		<div class='space-bottom'>
+        <div id='map' class='col12 row10'></div>
+		</div>
+				 
+		<div id="boton1" class="boton1"><button id="tegucigalpa"><font face= "Cambria"><b><i>Tegucigalpa</i></b></font></button></div>
+		<div id="boton2" class="boton2"><button id="c_ruinas"><font face= "Cambria"><b><i>Copán Ruinas</i></b></font></button></div>
+		<div id="boton3" class="boton3"><button id="norte"><font face= "Cambria"><b><i>Costa Norte</i></b></font></button></div>
+		<div id="boton4" class="boton4"><button id="rutalenca"><font face= "Cambria"><b><i>Ruta Lenca</i></b></font></button></div>	
+		<div id="boton5" class="boton5"><button id="pacifico"><font face= "Cambria"><b><i>Pacífico</i></b></font></button></div>
+		  
+				
+		<script>
+		var osm = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.emerald',
+		accessToken: 'pk.eyJ1IjoibXNhYmlsbG9ucyIsImEiOiJjazA1dTNxd3EwMGQyM25vMmFjNTB0MWJjIn0.vyKzryi0Gxl3sJk7kG4kXw',
+		maxZoom: 30,
+		minZoom: 4,
+		keyboard: true
+		});
+		
+		var osm2 =L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', { 
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,Imagery © <a href="https://www.mapbox.com/">Mapbox</a>', 
+		id: 'mapbox.pirates', 
+		accessToken: 'pk.eyJ1IjoibXNhYmlsbG9ucyIsImEiOiJjazA1dTNxd3EwMGQyM25vMmFjNTB0MWJjIn0.vyKzryi0Gxl3sJk7kG4kXw',
+		maxZoom: 30,
+		minZoom: 4,
+		keyboard: true
+		});
+		
+		var osm3 =L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', { 
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,Imagery © <a href="https://www.mapbox.com/">Mapbox</a>', 
+		id: 'mapbox.comic', 
+		accessToken: 'pk.eyJ1IjoibXNhYmlsbG9ucyIsImEiOiJjazA1dTNxd3EwMGQyM25vMmFjNTB0MWJjIn0.vyKzryi0Gxl3sJk7kG4kXw',
+		maxZoom: 30,
+		minZoom: 4,
+		keyboard: true
+		});
+		
+		var ESRI1 = L.esri.basemapLayer('Topographic');
+		var ESRI2 = L.esri.basemapLayer('Imagery');
+		var ESRI3 = L.esri.basemapLayer('NationalGeographic');
+		
+		var map = L.map('map',{
+		center: [14.098555, -87.185688],
+		zoom:7,
+		layers: [osm],
+		maxZoom: 17,
+		minZoom: 3,
+		zoomControl: false,
+		});
+		
+		//Menú de Capas//
+		var BaseLayers = { 
+			"Streets": osm,
+			"Pirata": osm2,
+			"Topographic": ESRI1,
+			"Imagery": ESRI2,
+			"NatGeo": ESRI3
+			};
+		
+		var c_pacifico =L.tileLayer.wms("http://localhost:8080/geoserver/Honduras/wms?service=WMS", {
+		layers: "Honduras:corredor_pacifico",
+		format: 'image/png',
+		transparent: true,
+				opacity: 0.7,
+				version: '1.3.0',
+				attribution: "Red Vial Oficial. Datos de INSEP"
+		});
+		
+		var c_lenca =L.tileLayer.wms("http://localhost:8080/geoserver/Honduras/wms?service=WMS", {
+		layers: "Honduras:corredor_lenca",
+		format: 'image/png',
+		transparent: true,
+		opacity: 0.7,
+		version: '1.3.0',
+		attribution: "Red Vial Oficial. Datos de INSEP"
+		});
+
+		var c_turistico =L.tileLayer.wms("http://localhost:8080/geoserver/Honduras/wms?service=WMS", {
+		layers: "Honduras:corredor_turistico",
+		format: 'image/png',
+		transparent: true,
+		opacity: 0.7,
+		version: '1.3.0',
+		attribution: "Red Vial Oficial. Datos de INSEP"
+		});
+		
+		//CAPA GEOJSon//		
+		new L.geoJson(Catastro_Minero);
+							
+		function getColor(d) {
+				return d == "Suspenso" ? '#A9A9A9':
+				d == "Delimitada" ? '#800080':
+				d == "Explotar" ? '#DB7093':
+				d == "Otorgada" ? '#4682B4':
+				d == "S-Explorar" ? '#808000':
+				d == "Explorar" ? '#7FFFD4':
+				d == "Solicitud" ? '#FFD700':
+				d == "S-Explotar" ? '#FFFFFF':
+				'#F08080';
+				}
+		
+		function estado(feature) {
+		return {
+		fillColor: getColor(feature.properties.estado),
+		weight: 2,
+		opacity: 1,
+		color: '#000000',
+		fillOpacity: 0.5
+		};
+		}
+			
+		L.geoJson(Catastro_Minero, {style: estado});
+		
+		function popup(feature, layer) {
+		if (feature.properties && feature.properties.nombre_zon) {
+		layer.bindPopup("<ul><h3><b><em>Nombre: </b></h3>" +feature.properties.nombre_zon+ "<h3><b>Clasificación:  </b></h3>"
+		+feature.properties.clasificac+ " (según material de extracción)</em></ul>")}};
+		
+		var geojson = L.geoJson(Catastro_Minero, {
+		style: estado,
+		onEachFeature: popup
+		});
+		
+		<!--MARCADORES-->		
+		var imagen = new L.RegularPolygonMarker([14.09892,-87.19295], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 30,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'Clau.jpeg'
+		});
+		  map.addLayer(imagen);  
+		  imagen.bindPopup("Casa");
+
+		  //MARCADORES COSTA NORTE//
+		  var IMG = new L.RegularPolygonMarker([15.84279,-87.94324], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'puerto.jpg'
+		});
+		  //map.addLayer(IMG);  
+		  IMG.bindPopup("Puerto Cortés");
+		  
+		  var img = new L.RegularPolygonMarker([16.34869, -86.47842], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'roatan.jpg'
+		});
+		  //map.addLayer(img);  
+		  img.bindPopup("La Isla Bonita");
+		  
+		  var img_1 = new L.RegularPolygonMarker([15.50054,-88.00507], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'sps.jpg'
+		});
+		  //map.addLayer(img_1);  
+		  img_1.bindPopup("San Pedro Sula");
+		  
+		  var img_2 = new L.RegularPolygonMarker([15.20125,-87.88422], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 's_rita.jpg'
+		});
+		  //map.addLayer(img_2);  
+		  img_2.bindPopup("Santa Rita de Yoro");
+		  
+		  var img_3 = new L.RegularPolygonMarker([15.40142,-87.8096], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'progreso.jpg'
+		});
+		  //map.addLayer(img_3);  
+		  img_3.bindPopup("El Progreso");
+		  
+		  var img_4 = new L.RegularPolygonMarker([15.77975,-87.43298], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'tela.jpg'
+		});
+		  //map.addLayer(img_4);  
+		  img_4.bindPopup("Tela");
+		  
+		  var img_5 = new L.RegularPolygonMarker([15.77014,-86.7889], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'ceiba.jpg'
+		});
+		  //map.addLayer(img_5);  
+		  img_5.bindPopup("La Ceiba");
+		  
+		  var img_6 = new L.RegularPolygonMarker([15.65897,-85.99205], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'tocoa.png'
+		});
+		  //map.addLayer(img_6);  
+		  img_6.bindPopup("Tocoa");
+		  
+		  var img_7 = new L.RegularPolygonMarker([15.92343,-85.93632], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'trujillo.jpg'
+		});
+		  //map.addLayer(img_7);  
+		  img_7.bindPopup("Trujillo");
+		  
+		//MARCADORES RUTA LENCA//
+		
+		  var Imagen = new L.RegularPolygonMarker([14.83846,-89.14341], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'c_ruinas.png'
+		});
+		  map.addLayer(Imagen);  
+		  Imagen.bindPopup("Las Ruinas de Copán");
+		
+		  var imagen1 = new L.RegularPolygonMarker([14.77197,-88.78832], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'santa rosa.jpg'
+		});
+		  //map.addLayer(imagen1);  
+		  imagen1.bindPopup("Escalinatas");
+		  
+		  var imagen2 = new L.RegularPolygonMarker([14.58659,-88.58737], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'celaque.jpg'
+		});
+		  //map.addLayer(imagen2);  
+		  imagen2.bindPopup("Cacique Lempira Señor de Las Montañas");
+		  
+		  var imagen3 = new L.RegularPolygonMarker([14.40768,-88.95527], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'sm_ocot.jpg'
+		});
+		  //map.addLayer(imagen3);  
+		  imagen3.bindPopup("Iglesia San Marcos de Ocotepeque");
+		  
+		  var imagen4 = new L.RegularPolygonMarker([14.21743,-88.78744], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'tambla.jpg'
+		});
+		  //map.addLayer(imagen4);  
+		  imagen4.bindPopup("Iglesia Tambla");
+		  
+		  var imagen5 = new L.RegularPolygonMarker([14.03455,-88.61916], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'mapulaca.jpg'
+		});
+		  //map.addLayer(imagen5);  
+		  imagen5.bindPopup("Parque de Mapulaca");
+		  
+		  var imagen6 = new L.RegularPolygonMarker([14.23845,-88.4741], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'erandique.jpg'
+		});
+		  //map.addLayer(imagen6);  
+		  imagen6.bindPopup("Iglesia Erandique");
+		  
+		  var imagen7 = new L.RegularPolygonMarker([14.42583,-88.40744], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 's_juan.jpg'
+		});
+		  //map.addLayer(imagen7);  
+		  imagen7.bindPopup("San Juan del Caite");
+		  
+		  var imagen8 = new L.RegularPolygonMarker([14.30845,-88.17804], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'esperanza.jpg'
+		});
+		  //map.addLayer(imagen8);  
+		  imagen8.bindPopup("La Esperanza");
+		  
+		  //MARCADORES PACIFICO//
+		  var imagen_a = new L.RegularPolygonMarker([13.61128, -87.7541], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'goascoran.jpg'
+		});
+		  //map.addLayer(imagen_a);  
+		  imagen_a.bindPopup("Goascorán");
+		  
+		  var imagen_b = new L.RegularPolygonMarker([13.53101,-87.48814], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'nacaome.jpg'
+		});
+		  //map.addLayer(imagen_b);  
+		  imagen_b.bindPopup("Nacaome");
+		  
+		  var imagen_c = new L.RegularPolygonMarker([13.42841,-87.4498], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 's_lorenzo.jpg'
+		});
+		  //map.addLayer(imagen_c);  
+		  imagen_c.bindPopup("San Lorenzo");
+		  
+		  var imagen_d = new L.RegularPolygonMarker([13.3019,-87.18287], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'choluteca.jpg'
+		});
+		  //map.addLayer(imagen_d);  
+		  imagen_d.bindPopup("Choluteca");
+		  
+		  var imagen_e = new L.RegularPolygonMarker([13.43273,-86.80624], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'sm_colon.jpg'
+		});
+		  //map.addLayer(imagen_e);  
+		  imagen_e.bindPopup("San Marcos de Colón");
+		  
+		  var imagen_f = new L.RegularPolygonMarker([13.28161,-87.64206], {
+		  numberOfSides: 4,
+		  rotation: 45,
+		  radius: 50,
+		  fillColor:'RosyBrown',
+		  fillOpacity:3,
+		  color:'Orchid',
+		  opacity:1,
+		  weight:1,
+		  imageCircleUrl: 'amapala.jpg'
+		});
+		  //map.addLayer(imagen_f);  
+		  imagen_f.bindPopup("La Isla del Tigre");
+
+		
+		//GRUPOS DE CAPAS//
+		var miGrupodeCapas = L.layerGroup ([IMG,img,img_1,img_2,img_3,img_4,img_5,img_6,img_7]);
+		var miGrupodeCapas2 = L.layerGroup ([imagen1,imagen2,imagen3,imagen4,imagen5,imagen6,imagen7,imagen8]);
+		var miGrupodeCapas3 = L.layerGroup ([imagen_a,imagen_b,imagen_c,imagen_d,imagen_e,imagen_f]);
+		
+					
+		var OverlayLayers = {				
+			"Catastro Minero": geojson,					
+			"Corredor Tursitico Norte": c_turistico,
+			"Sitios del Corredor Tursitico Norte": miGrupodeCapas,
+			"Corredor Lenca": c_lenca,
+			"Sitios de Ruta Lenca": miGrupodeCapas2,
+			"Corredor Pacífico": c_pacifico,
+			"Sitios del Corredor Pacífico": miGrupodeCapas3,	
+			};
+			
+		new L.control.layers(BaseLayers, OverlayLayers,{collapsed:true}).addTo(map);
+		
+					 
+		//COORDENADAS FLY//
+		var tegucigalpa = [14.098555, -87.185688];
+			c_ruinas = [14.8384,-89.1434];
+			norte = [15.7701,-86.7889];
+		    r_lenca = [14.3933, -88.6587];
+		    pacifico = [13.4284,-87.449];
+	
+		
+		//FLY//
+			document.getElementById('tegucigalpa').onclick = function () { map.flyTo(tegucigalpa, 14); };
+			document.getElementById('c_ruinas').onclick = function () { map.flyTo(c_ruinas, 14, {duration: 4}); };
+			document.getElementById('norte').onclick = function () { map.flyTo(norte, 9, {duration: 4}); };
+			document.getElementById('rutalenca').onclick = function () { map.flyTo(r_lenca, 10); };
+			document.getElementById('pacifico').onclick = function () { map.flyTo(pacifico, 10, {duration: 4}); };
+	
+	
+		//Controles de Mapa//		
+		var miniMap = new L.Control.MiniMap(osm3,{ toggleDisplay: true, minimized:false, position: 'bottomright' }).addTo(map);
+		var MousePosition = new L.control.mousePosition(ESRI1).addTo(map);
+		var escala = L.control.scale().addTo(map);
+		new L.Control.Zoom({ position: 'topleft'}).addTo(map);
+			
+	</script>
+	</body>
+</html>
